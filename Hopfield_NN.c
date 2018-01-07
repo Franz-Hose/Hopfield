@@ -9,6 +9,7 @@ char temp_last = 0;
 int start = 0;
 int main()
 {
+
     int i = 0;
     int j = 0;
     int k = 0;
@@ -46,7 +47,7 @@ int main()
     {
         for(int k = 0; k<20; k++)
         {
-            printf("%c", pattern[0][k][j]);
+            printf("%c", train_pattern[0][k][j]);
         }
         printf("\n");
     }
