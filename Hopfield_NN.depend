@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1515418782 source:c:\users\dennis\documents\01_master\computational intelligence\hopfield_nn\hopfield_nn.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<math.h>
+
