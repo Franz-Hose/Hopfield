@@ -8,6 +8,7 @@
 #define lines 10
 
 #define n_neurons columns * lines
+#define max_iter 2000
 
 int train_pattern[N_patt][n_neurons];
 int test_pattern[N_patt][n_neurons];
@@ -15,6 +16,7 @@ char temp_input = 0;
 char temp_last = 0;
 int start = 0;
 double WEIGHTS[n_neurons][n_neurons] = {{0}};
+double out[n_neurons] = {0};
 
 void make_train_bipolar()
 {
@@ -22,14 +24,14 @@ void make_train_bipolar()
     {
         for(int j= 0; j < n_neurons; j++)
         {
-                if(train_pattern[i][j]== 42)
-                {
-                    train_pattern[i][j] = 1;
-                }
-                else if(train_pattern[i][j] == 46)
-                {
-                    train_pattern[i][j] = -1;
-                }
+            if(train_pattern[i][j]== 42)
+            {
+                train_pattern[i][j] = 1;
+            }
+            else if(train_pattern[i][j] == 46)
+            {
+                train_pattern[i][j] = -1;
+            }
 
         }
     }
@@ -41,14 +43,14 @@ void make_test_bipolar()
     {
         for(int j= 0; j < n_neurons; j++)
         {
-                if(test_pattern[i][j]== 42)
-                {
-                    test_pattern[i][j] = 1;
-                }
-                else if(test_pattern[i][j] == 46)
-                {
-                    test_pattern[i][j] = -1;
-                }
+            if(test_pattern[i][j]== 42)
+            {
+                test_pattern[i][j] = 1;
+            }
+            else if(test_pattern[i][j] == 46)
+            {
+                test_pattern[i][j] = -1;
+            }
 
         }
     }
@@ -78,7 +80,37 @@ void trainingphase()
 
 void recovery_phase()
 {
-    for(int pattern)
+    for(int pattern = 0; pattern < N_patt; pattern++)
+    {
+        for(int iteration = 0; iteration < max_iter; iteration++)
+        {
+            for(int n1 = 0; n1 < n_neurons; n1++)
+            {
+                out[n1] = 0.0;
+
+                for(int n2 = 0; n2 < n_neurons; n2++)
+                {
+                    out[n1] += WEIGHTS[n1][n2] * test_pattern[pattern][n2];
+
+                }
+            }
+        }
+        int true_count = 0;
+        for(int neuron = 0; neuron < n_neurons; neuron++)
+        {
+            if(out[neuron] == test_pattern[pattern][neuron])
+                true_count += 1;
+        }
+        if(true_count == 200)
+            break;
+        else
+            for(int neuron = 0; neuron < n_neurons; neuron++)
+            {
+                test_pattern[pattern][neuron] == out[neuron];
+
+            }
+
+    }
 }
 
 int main()
@@ -143,6 +175,11 @@ int main()
     }
     make_test_bipolar();
 
+    /* trainiere die Gewichte*/
     trainingphase();
+
+    /* recover ein schlechtes pattern*/
+    recovery_phase();
+
 
 }
