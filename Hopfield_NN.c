@@ -3,29 +3,33 @@
 #include <time.h>
 #include <math.h>
 
-int train_pattern[10][20][10];
-int test_pattern[10][20][10];
+#define N_patt 10
+#define columns 20
+#define lines 10
+
+#define n_neurons columns * lines
+
+int train_pattern[N_patt][n_neurons];
+int test_pattern[N_patt][n_neurons];
 char temp_input = 0;
 char temp_last = 0;
 int start = 0;
+double WEIGHTS[n_neurons][n_neurons] = {{0}};
 
 void make_train_bipolar()
 {
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < N_patt; i++)
     {
-        for(int j= 0; j < 20; j++)
+        for(int j= 0; j < n_neurons; j++)
         {
-            for(int k = 0; k<10; k++)
-            {
-                if(train_pattern[i][j][k] == 42)
+                if(train_pattern[i][j]== 42)
                 {
-                    train_pattern[i][j][k] = 1;
+                    train_pattern[i][j] = 1;
                 }
-                else if(train_pattern[i][j][k] == 46)
+                else if(train_pattern[i][j] == 46)
                 {
-                    train_pattern[i][j][k] = -1;
+                    train_pattern[i][j] = -1;
                 }
-            }
 
         }
     }
@@ -33,24 +37,48 @@ void make_train_bipolar()
 
 void make_test_bipolar()
 {
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < N_patt; i++)
     {
-        for(int j= 0; j < 20; j++)
+        for(int j= 0; j < n_neurons; j++)
         {
-            for(int k = 0; k<10; k++)
-            {
-                if(test_pattern[i][j][k] == 42)
+                if(test_pattern[i][j]== 42)
                 {
-                    test_pattern[i][j][k] = 1;
+                    test_pattern[i][j] = 1;
                 }
-                else if(test_pattern[i][j][k] == 46)
+                else if(test_pattern[i][j] == 46)
                 {
-                    test_pattern[i][j][k] = -1;
+                    test_pattern[i][j] = -1;
                 }
-            }
 
         }
     }
+}
+
+void trainingphase()
+{
+    for(int pattern = 0; pattern < N_patt; pattern++)
+    {
+        for(int i = 0; i < n_neurons; i++)
+        {
+            for(int j = 0; j < n_neurons; j++)
+            {
+                if(i == j)
+                {
+                    WEIGHTS[i][j] = 0;
+                }
+                else
+                {
+
+                    WEIGHTS[i][j] += train_pattern[pattern][i] * train_pattern[pattern][j];
+                }
+            }
+        }
+    }
+}
+
+void recovery_phase()
+{
+    for(int pattern)
 }
 
 int main()
@@ -58,7 +86,7 @@ int main()
 
     int i = 0;
     int j = 0;
-    int k = 0;
+
     /* Training input*/
     while(start == 0)
     {
@@ -69,7 +97,6 @@ int main()
         {
             i++;
             j = 0;
-            k = 0;
         }
         else if(temp_last == '-' && temp_input == '-')
         {
@@ -77,13 +104,8 @@ int main()
         }
         else if(temp_input == '.' || temp_input == '*')
         {
-            train_pattern[i][j][k] = temp_input;
+            train_pattern[i][j] = temp_input;
             j++;
-        }
-        else if(temp_input == '\n')
-        {
-            k++;
-            j = 0;
         }
 
         temp_last = temp_input;
@@ -110,21 +132,17 @@ int main()
         {
             i++;
             j = 0;
-            k = 0;
         }
         else if(temp_input == '.' || temp_input == '*')
         {
-            test_pattern[i][j][k] = temp_input;
+            test_pattern[i][j] = temp_input;
             j++;
-        }
-        else if(temp_input == '\n')
-        {
-            k++;
-            j = 0;
         }
 
         temp_last = temp_input;
     }
     make_test_bipolar();
+
+    trainingphase();
 
 }
