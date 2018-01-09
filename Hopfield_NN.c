@@ -221,7 +221,7 @@ int main()
                 printf("\n");
             }
         }
-        if(i == patterncounter-1)
+        if(i == patterncounter)
         {
             break;
         }
